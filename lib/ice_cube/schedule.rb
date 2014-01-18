@@ -343,7 +343,7 @@ module IceCube
 
     # Load the schedule from a hash
     def self.from_hash(original_hash, options = {})
-      original_hash[:start_date] = options[:start_date_override] if options[:start_date_override]
+      original_hash[:start_date] = TimeUtil.ensure_time(options[:start_date_override]) if options[:start_date_override]
       # And then deserialize
       data = IceCube::FlexibleHash.new(original_hash)
       schedule = IceCube::Schedule.new TimeUtil.deserialize_time(data[:start_date])

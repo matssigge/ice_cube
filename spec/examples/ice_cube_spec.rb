@@ -623,6 +623,20 @@ describe IceCube::Schedule do
     end
   end
 
+  it 'should accept start_date_override as a Date in from_yaml' do
+    start_date = DAY # zero seconds
+    schedule = IceCube::Schedule.new(start_date)
+    schedule.add_recurrence_rule IceCube::Rule.minutely
+
+    start_date_override = DAY
+
+    schedule2 = IceCube::Schedule.from_yaml(schedule.to_yaml, :start_date_override => start_date_override.to_date)
+    dates = schedule2.first(10)
+    dates.each do |date|
+      date.year.should == start_date_override.year
+    end
+  end
+
   it 'should always generate the date based off the start_date_override when specified in from_hash' do
     start_date = DAY # zero seconds
     schedule = IceCube::Schedule.new(start_date)
@@ -634,6 +648,20 @@ describe IceCube::Schedule do
     dates = schedule2.first(10)
     dates.each do |date|
       date.sec.should == start_date_override.sec
+    end
+  end
+
+  it 'should accept start_date_override as a Date in from_hash' do
+    start_date = DAY # zero seconds
+    schedule = IceCube::Schedule.new(start_date)
+    schedule.add_recurrence_rule IceCube::Rule.minutely
+
+    start_date_override = DAY
+
+    schedule2 = IceCube::Schedule.from_hash(schedule.to_hash, :start_date_override => start_date_override.to_date)
+    dates = schedule2.first(10)
+    dates.each do |date|
+      date.year.should == start_date_override.year
     end
   end
 
